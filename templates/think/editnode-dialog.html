@@ -1,0 +1,16 @@
+  {% extends "simple-base.html" %}
+  
+  {% block content %}
+  <div id="editNodeModalDialog" title="Edit the text of the node">  
+	  <form action=""> 
+	    <fieldset> 
+		    <label for="text">Text</label> 
+		    <textarea name="editNodeModalDialogText" id="editNodeModalDialogText" class="text ui-widget-content ui-corner-all"></textarea>
+	    </fieldset> 
+	  </form> 
+  </div> 
+  
+  <script type="text/javascript">
+    ajs.think.ui.editNodeDialog.initialiseEditNodeModalDialog();
+  </script>
+  {% endblock %}

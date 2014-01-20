@@ -1,0 +1,30 @@
+  {% extends "simple-base.html" %}  
+  
+  {% block content %}
+  <p>In Think you can create and view mind maps that are called thoughts.</p>
+  <button onclick="ajs.think.mainMenu.loadTutorial();">Open Tutorial</button><span>  (A good start for new users)</span>
+  <p style="margin-top: 30px;">Here registered users can create a new thought or open an existing one.</p>
+  <button class="loggedInOnly" onclick="ajs.think.mainMenu.loadNewThought();">Create new thought</button>
+  <span>with name:</span>
+  <input type="text" value="" id="newThoughtName" class="loggedInOnly" />
+  <span id="newThoughtError" class="error"></span>
+        <br/>
+        
+        <table class="ui-widget ui-widget-content" style="margin-top: 30px;">
+          <thead>
+            <tr class="ui-widget-header">
+              <th></th>
+              <th>Thoughts</th>
+              <th style="margin-left:10px;"></th>
+            </tr>
+          </thead>
+          <tbody id="thoughtTable">
+            <tr><td></td><td><span><i>You have no thoughts</i></span></td><td></td></tr>
+            <!-- Dynamically populated with Javascript. -->
+          </tbody>
+        </table>
+      
+      <script type="text/javascript">
+        ajs.think.mainMenu.initialiseThoughtsTab();
+      </script>
+  {% endblock %}

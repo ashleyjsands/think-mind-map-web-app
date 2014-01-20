@@ -1,0 +1,4 @@
+cron:
+- description: Delete Old Sessions
+  url: /sessions
+  schedule: every 24 hours

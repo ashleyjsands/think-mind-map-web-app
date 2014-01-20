@@ -1,0 +1,61 @@
+  {% extends "simple-base.html" %}
+
+  {% block content %}
+    <p>Change the colors of this thought by selecting a color box and then using the color picker to change the color.</p>
+    <table>
+    <tr>
+    <td>
+    <table style="border: 1px solid;">
+      <thead>
+        <tr>
+        <td> </td>
+        <td>Top</td>
+        <td>Bottom</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Background</td>
+          <td><div class='colorBox selectedColorBox' id='backgroundTopColor'></div></td>
+          <td><div class='colorBox' id='backgroundBottomColor'></div></td>
+        </tr>
+      </tbody>
+    </table><table style="border: 1px solid;">
+      <thead>
+        <td> </td>
+        <td>Outer</td>
+        <td>Inner</td>
+        <td>Text</td>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Node</td>
+          <td><div class='colorBox' id='nodeOuterColor'></div></td>
+          <td><div class='colorBox' id='nodeInnerColor'></div></td>
+          <td><div class='colorBox' id='nodeTextColor'></div></td>
+        </tr>
+        <tr>
+          <td>Connection</td>
+          <td><div class='colorBox' id='connectionOuterColor'></div></td>
+          <td><div class='colorBox' id='connectionInnerColor'></div></td>
+          <td>N/A</td>
+        </tr>
+      </tbody>
+    </table>
+    </td>
+    <td>
+      <div id='colorPicker'></div>
+    </td>
+    </tr>
+    </table>
+    <h3>Preview</h3>
+    <div style="border: 2px solid;">
+      <canvas id="theme-preview"></canvas>
+    </div>
+    <button onclick="ajs.think.ui.themeEditorTab.restoreTheme();">Restore default</button>
+    <button onclick="ajs.think.ui.themeEditorTab.saveThoughtAndTheme();">Save Thought</button>
+
+    <script type="text/javascript">
+      ajs.think.ui.themeEditorTab.initialiseThemeTab();
+    </script>
+  {% endblock %}

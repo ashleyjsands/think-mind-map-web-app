@@ -1,0 +1,22 @@
+  {% extends "simple-base.html" %}  
+    
+  {% block head %}
+    <!--[if IE]><script type="text/javascript" src="js/third_party/excanvas.js"></script><![endif]-->
+  {% endblock %}
+  
+  {% block content %}  
+    <div id="thoughtOptionsModalDialog" title="Thought Options">
+  
+    <div id="thoughtOptionsTabs">
+	    <ul>
+		    <li><a href="page/thought-options-theme.html">Theme</a></li>
+		    <li><a href="page/thought-options-access.html">Access</a></li>
+	    </ul>
+    </div>
+  </div> 
+  
+  <script type="text/javascript">
+    ajs.think.ui.thoughtOptions.initialiseThoughtOptionsModalDialog();
+  </script>
+  
+  {% endblock %}

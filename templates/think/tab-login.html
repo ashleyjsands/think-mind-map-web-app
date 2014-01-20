@@ -1,0 +1,14 @@
+  {% extends "simple-base.html" %}  
+  
+  {% block content %}
+
+    {% include "../openiduser/login.html" %}
+                  
+    <br/><br/>
+    <p>Not registered? Or don't know what OpenID is? Go to the Register tab.</p>
+      
+    <script type='text/javascript'>
+      //openiduser.resizeOpenIdProviderButtons();
+      $("button").button();
+    </script>
+  {% endblock %}

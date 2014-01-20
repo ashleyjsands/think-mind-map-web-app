@@ -1,0 +1,8 @@
+.colorBox { 
+  height: 20px; 
+  width: 20px;
+}
+    
+.selectedColorBox {
+  border: 2px solid #FFF;
+}

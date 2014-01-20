@@ -1,0 +1,110 @@
+body {
+  margin : 0px;
+}
+
+hr {
+  border: solid 2px #000;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 15px;
+}
+
+#think {
+  background-color: rgba(255, 255, 255, 0);
+}
+
+h1 {
+  text-align: center
+}
+
+.menu {
+  padding: 15px;
+  background: #FFF;
+  border: solid 4px #000;
+  border-radius: 1.6em;
+  -moz-border-radius: 1.6em;
+  -webkit-border-radius: 1.6em;
+  z-index: 10; 
+  position: absolute;
+}
+
+#mainMenu {
+  width: 700px;
+  top: 50px;
+}
+
+.hiddable {
+  display: none;
+}
+
+.visibleOnLoad { /* This is just a class identifier for some code. */
+
+}
+
+.error {
+  color: #F00;
+  padding-top: 10px;
+}
+#title {
+  border-radius: 1.6em;
+  -moz-border-radius: 1.6em;
+  -webkit-border-radius: 1.6em;
+  margin-bottom: 10px;
+}
+
+.greyToBlackGradient {
+  color: #fff;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 20px;
+  
+  /* For WebKit (Safari, Google Chrome etc) */
+  background: -webkit-gradient(linear, left top, left bottom, from(#888), to(#000));
+  /* For Mozilla/Gecko (Firefox etc) */
+  background: -moz-linear-gradient(top, #888, #000);
+  /* For Internet Explorer 5.5 - 7 */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#FF888888, endColorstr=#FF000000);
+  /* For Internet Explorer 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#FF888888, endColorstr=#FF000000)";
+}
+
+.greyGradient {
+  color: #fff;  
+  /* For WebKit (Safari, Google Chrome etc) */
+  background: -webkit-gradient(linear, left top, left bottom, from(#CCC), to(#888));
+  /* For Mozilla/Gecko (Firefox etc) */
+  background: -moz-linear-gradient(top, #CCC, #888);
+  /* For Internet Explorer 5.5 - 7 */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#FFCCCCCC, endColorstr=#FF888888);
+  /* For Internet Explorer 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#FFCCCCCC, endColorstr=#FF888888)";
+}
+
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.2em;
+}
+
+p {
+  font-size: 0.9em;
+}
+
+#editNodeModalDialogText {
+  width: 100%;
+}
+
+.thoughtTable {
+  overflow-x: scroll;
+}
+
+.thoughtNameTableCell {
+  margin-left: 10px; 
+  margin-right: 100px;
+}
+
+.publicizeThoughtButton {
+  margin-top: 20px;
+}

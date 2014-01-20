@@ -1,0 +1,14 @@
+{% extends "simple-base.html" %}
+
+{% block content %}
+  
+  <div id="exportThoughtDialog">
+    <center><div id="exportThoughtImage"></div></center>
+    <p>Download: right click -> Save Image as</p>
+    <p><i>Note: The image above does not represent its actual size &amp; shape.</i></p>
+  </div>
+  
+  <script type="text/javascript">
+    ajs.think.ui.exportThoughtDialog.initialiseExportThoughtDialog();
+  </script>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "simple-base.html" %}
+
+{% block content %}
+  <div id="newUserDialog" title="Welcome to Think">
+    <p>Think is a free Mind-mapping tool.</p>
+    
+    <p>Think can be used to create, change and view mind maps. Mind maps are very useful for visualising and structuring ideas, brain storming, studying and much more.</p>
+    
+    <p>If you are new to Think, you should try Think out now by opening the tutorial.</p>
+    
+    <button onclick="$('#' + ajs.think.mainMenu.ids.newUserDialog).dialog('close'); ajs.think.mainMenu.loadTutorial();">Try tutorial now!</button>
+  </div>
+  
+  <script type="text/javascript">
+    ajs.think.mainMenu.initialiseNewUserDialog();
+  </script>
+{% endblock %}

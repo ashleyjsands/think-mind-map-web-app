@@ -1,0 +1,20 @@
+  {% extends "simple-base.html" %}  
+  
+  {% block content %}
+    <h2>What is <a href="http://openid.net/">OpenID?</a></h2>
+    <p>Think uses <a href="http://openid.net/">OpenID</a> as a login system. This means that you can use an existing OpenID account (such as a Google or Yahoo account) to log into Think. One benefit of OpenID is that you only need one account to access many OpenID-enabled websites. This avoids the duplication of many redudnant usernames and passwords.</p>
+            
+    <h2>Register</h2>
+    <p>Before you register, it is advised that you check the Login tab to see if you already have an account with an OpenID provider. If you do, click the appropriate button to login instantly without having to create an account.</p>
+        
+    <p>If you don't have an OpenID account, it is recommended that you create one with myOpenID.</p>
+        
+    <button onclick="document.location='https://www.myopenid.com/signup?affiliate_id=53321';"><a href="https://www.myopenid.com/signup?affiliate_id=53321">Register with myOpenID now!</a></button>
+        
+    <p>Once you have created your account, you will be brought back to Think logged in. Next time you visit Think, you must login by navigating to the Login tab, select myOpenID as your OpenID provider,  enter your username and click the sign-in button.</p>
+  
+    <script type='text/javascript'>
+      $("button").button();
+    </script>
+
+  {% endblock %}

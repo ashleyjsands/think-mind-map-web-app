@@ -1,0 +1,10 @@
+  {% extends "simple-base.html" %}
+
+  {% block content %}
+	  <p id="thoughtOptionsPublicStatus"></p>
+    <button id="publicizeThoughtButton" onclick="ajs.think.ui.accessTab.publicizeThoughtButtonClick();"></button>
+  
+    <script type="text/javascript">
+      ajs.think.ui.accessTab.initialiseAccessTab();
+    </script>
+  {% endblock %}
