@@ -430,7 +430,7 @@ if (!COMPILED) {
         !goog.dependencies_.written[src]) {
       goog.dependencies_.written[src] = true;
       var doc = goog.global.document;
-      doc.write('<script type="text/javascript" src="' +
+      doc.write('<script type="text/javascript" src="' + 
                 src + '"></' + 'script>');
     }
   };

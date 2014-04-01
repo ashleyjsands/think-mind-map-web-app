@@ -10,39 +10,39 @@
   <meta name="google-site-verification" content="QQc90crMeFp0kzkzVDmikSfgUCBlaj8XYcQIXsyFESg" />
   
   {% block head %}
-  <!--[if IE]><script type="text/javascript" src="js/third_party/excanvas.js"></script><![endif]-->
+  <!--[if IE]><script type="text/javascript" src="{{ STATIC_URL }}js/third_party/excanvas.js"></script><![endif]-->
   
   <!-- Stylesheets -->
-  <link type="text/css" href="stylesheets/think.css" rel="stylesheet" /> 
+  <link type="text/css" href="{{ STATIC_URL }}stylesheets/think.css" rel="stylesheet" /> 
   
   <!-- Third Party scripts -->
-  <script src="js/third_party/getElementsByClassName-1.0.1.js" type="text/javascript"></script>
-  <script src="js/third_party/json2.js" type="text/javascript"></script>
-  <script src="js/third_party/base64.js" type="text/javascript"></script>
-  <script src="js/third_party/canvas2image.js" type="text/javascript"></script> <!-- Depends on js/third_party/base64.js -->
-  <script src="js/goog/base.js" type="text/javascript"></script> <!-- Required by js/ajs/base.js -->
+  <script src="{{ STATIC_URL }}js/third_party/getElementsByClassName-1.0.1.js" type="text/javascript"></script>
+  <script src="{{ STATIC_URL }}js/third_party/json2.js" type="text/javascript"></script>
+  <script src="{{ STATIC_URL }}js/third_party/base64.js" type="text/javascript"></script>
+  <script src="{{ STATIC_URL }}js/third_party/canvas2image.js" type="text/javascript"></script> <!-- Depends on js/third_party/base64.js -->
+  <script src="{{ STATIC_URL }}js/goog/base.js" type="text/javascript"></script> <!-- Required by js/ajs/base.js -->
   <!-- JQuery -->
-  <script src="js/third_party/jquery-1.4.2.min.js" type="text/javascript"></script>
-  <script src="js/third_party/jquery-ui-1.8rc3.custom.min.js" type="text/javascript"></script>
-  <link type="text/css" href="stylesheets/third_party/dark-hive/jquery-ui-1.8.custom.css" rel="stylesheet" />
+  <script src="{{ STATIC_URL }}js/third_party/jquery-1.4.2.min.js" type="text/javascript"></script>
+  <script src="{{ STATIC_URL }}js/third_party/jquery-ui-1.8rc3.custom.min.js" type="text/javascript"></script>
+  <link type="text/css" href="{{ STATIC_URL }}stylesheets/third_party/dark-hive/jquery-ui-1.8.custom.css" rel="stylesheet" />
   
   <!-- openiduser -->
-  <script src="openiduser/openiduser.js" type="text/javascript"></script>
-<link rel="stylesheet" href="openiduser/login.css" /> 
+  <script src="{{ STATIC_URL }}openiduser/openiduser.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="{{ STATIC_URL}}openiduser/login.css" /> 
 
   <!-- Custom JQuery css must be loaded after standard JQuery is loaded. -->
-  <link rel="stylesheet" type="text/css" href="stylesheets/custom_jquery.css" />
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL}}stylesheets/custom_jquery.css" />
   
   <!-- Web App scripts -->
-  <script src="js/ajs/deps.js" type="text/javascript"></script>
-  <script src="js/ajs/require.js" type="text/javascript"></script>
-  <script src="js/ajs/base.js" type="text/javascript"></script>
+  <script src="{{ STATIC_URL }}js/ajs/deps.js" type="text/javascript"></script>
+  <script src="{{ STATIC_URL }}js/ajs/require.js" type="text/javascript"></script>
+  <script src="{{ STATIC_URL }}js/ajs/base.js" type="text/javascript"></script>
     
   <!-- Thought Options -->
-  <link rel="stylesheet" href="stylesheets/goog/css/common.css" />
-  <link rel="stylesheet" href="stylesheets/goog/css/hsvpalette.css" /> 
-  <script src="js/goog/colorPickerMinified.js" type="text/javascript"></script> 
-  <link rel="stylesheet" href="stylesheets/thought-options.css" /> 
+  <link rel="stylesheet" href="{{ STATIC_URL }}stylesheets/goog/css/common.css" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}stylesheets/goog/css/hsvpalette.css" /> 
+  <script src="{{ STATIC_URL }}js/goog/colorPickerMinified.js" type="text/javascript"></script> 
+  <link rel="stylesheet" href="{{ STATIC_URL }}stylesheets/thought-options.css" /> 
   {% endblock %}
 
   {% block extrahead %}{% endblock %}
