@@ -14,6 +14,7 @@ from utilities import getUrlFilePath, is_none_or_empty
 from openiduser.session import authenticate_user_session, get_session_id
 from think.models import * # Get the constants
 import think.json
+from think.thought import Names
 from think.permission import get_permission_type, is_user_permitted_to_modify_thought
 
 
@@ -25,7 +26,7 @@ main_html_file = 'static/think.html'
 class PublicThoughtView(View):
   """An interface to make Thoughts public or private."""
   
-  def post(self):
+  def post(self, *args, **kwargs):
     """Makes a thought public."""
     thought_id = self.request.get(Names.id)
     if is_none_or_empty(thought_id):
@@ -64,7 +65,7 @@ class PublicThoughtView(View):
     body['success'] = True
     self.response.out.write(simplejson.JSONEncoder().encode(body))
   
-  def delete(self):
+  def delete(self, *args, **kwargs):
     """Makes a thought private."""
     thought_id = self.request.get(Names.id)
     if is_none_or_empty(thought_id):
@@ -108,10 +109,10 @@ class ThoughtView(View):
   """Serves Thoughts via a RESTful API.
   """
   
-  def get(self):
+  def get(self, *args, **kwargs):
     """Simply returns a specific Thought.
     """
-    thought_id = self.request.get(Names.id)
+    thought_id = kwargs[Names.id]
     thought_name = self.request.get(Names.name)
     collection = self.request.get(Names.collection)
     type = self.request.get(Names.type)
@@ -221,17 +222,17 @@ class ThoughtView(View):
     self.response.headers[content_type_name] = json_content_type  
     self.response.out.write(simplejson.JSONEncoder().encode(body))
           
-  def post(self):
+  def post(self, *args, **kwargs):
     """Creates a thought based on the input in the POST request.
     """
     self.create_or_update_thought()
   
-  def put(self):
+  def put(self, *args, **kwargs):
     """Creates or updates a thought based on the input in the PUT request.
     """
     self.create_or_update_thought()
   
-  def delete(self):
+  def delete(self, *args, **kwargs):
     """Deletes a thought based on the input in the PUT request.
     """
     thought_id = self.request.get(Names.id)

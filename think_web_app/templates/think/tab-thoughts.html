@@ -3,6 +3,8 @@
   {% block content %}
   <p>In Think you can create and view mind maps that are called thoughts.</p>
   <button onclick="ajs.think.mainMenu.loadTutorial();">Open Tutorial</button><span>  (A good start for new users)</span>
+  <!-- User thoughts are disabled for the time being
+
   <p style="margin-top: 30px;">Here registered users can create a new thought or open an existing one.</p>
   <button class="loggedInOnly" onclick="ajs.think.mainMenu.loadNewThought();">Create new thought</button>
   <span>with name:</span>
@@ -20,9 +22,9 @@
           </thead>
           <tbody id="thoughtTable">
             <tr><td></td><td><span><i>You have no thoughts</i></span></td><td></td></tr>
-            <!-- Dynamically populated with Javascript. -->
           </tbody>
         </table>
+  -->
       
       <script type="text/javascript">
         ajs.think.mainMenu.initialiseThoughtsTab();

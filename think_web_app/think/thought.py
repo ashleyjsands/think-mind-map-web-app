@@ -3,16 +3,14 @@ A collection of methods relating to the Thought Model.
 """
 
 
-from google.appengine.ext.db import GqlQuery
-
-from think.DatastoreModels import * # Get the constants
-from think.node import nodeToDict, getNodeId, findNode
-from think.connection import connectionToDict
-from utilities import modelListToDict
-from think.permission import getPermissionsUsingThought
-from think.theme import themeToDict, getThemeId, createOrUpdateTheme, deleteTheme, getThemeUsingId
-from think.misc import getId
-from think.MetaData import getDefaultTheme
+from think.models import * # Get the constants
+from think.node import node_to_dict, get_node_id, find_node
+from think.connection import connection_to_dict
+from think.permission import get_permissions_using_thought
+from think.theme import theme_to_dict, get_theme_id, create_or_update_theme, delete_theme, get_theme_using_id
+from think.misc import get_id
+from think.data import get_default_theme
+from utilities import model_list_to_dict
 
 
 class Names:
@@ -27,34 +25,34 @@ class Names:
   x = 'x'
   y = 'y'
   text = 'text'
-  nodeOne = 'nodeOne'
-  nodeTwo = 'nodeTwo'
+  node_one = 'node_one'
+  node_two = 'node_two'
   connections = 'connections'
   collection = 'collection'
   all = 'all'
   modifiable = 'modifiable'
   type = 'type'
-  isPublic = 'isPublic' # This is called 'isPublic' because 'public' is a javascript keyword.
+  is_public = 'is_public' # This is called 'is_public' because 'public' is a javascript keyword.
 
-getThoughtId = getId
+get_thought_id = get_id
 
-def getThoughtByNameAndAuthor(thoughtName, author):
+def get_thought_by_name_and_author(thought_name, author):
   """Get a Thought with the given name for the given author.
      
      Args:
-       thoughtName: the name of the thought.
+       thought_name: the name of the thought.
        author: the user that owns the thought.
      
      Returns: the thought.
   """
-  query = GqlQuery("SELECT * FROM Permission WHERE thought.name = :1 AND user = :2 AND type = :3", thoughtName, author, permitModify)
+  query = Permission.objects.filter(thought__name=thought_name, user=author, type=permit_modify)
   permission = query.get()
   if permission != None:
     return permission.thought
   else:
     return None
 
-def getThoughtUsingName(name):
+def get_thought_using_name(name):
   """Gets the Thought from DataStore.
      
      Args:
@@ -62,11 +60,11 @@ def getThoughtUsingName(name):
      
      Returns: a Thought model.
   """
-  query = GqlQuery("SELECT * FROM Thought WHERE name = :1", name)
+  query = Thought.objects.filter(name=name)
   thought = query.get()
   return thought
 
-def getThoughtUsingId(id):
+def get_thought_using_id(id):
   """Gets the Thought from DataStore.
      
      Args:
@@ -75,69 +73,69 @@ def getThoughtUsingId(id):
      Returns: a Thought model.
   """
   try:
-    thought = Thought.get(id)
+    thought = Thought.objects.get(id=id)
     return thought
   except Exception, e:
     return None
 
-def deleteThoughtUsingId(id):
+def delete_thought_using_id(id):
   """Deletes the Thought and all related models from DataStore.
      
      Args:
        id: The id of the thought.
   """
-  thought = getThoughtUsingId(id)
+  thought = get_thought_using_id(id)
   
   for node in getThoughtNodes(thought):
     node.delete()
     
-  for connection in getThoughtConnections(thought):
+  for connection in get_thought_connections(thought):
     connection.delete()
   
-  for permission in getPermissionsUsingThought(thought):
+  for permission in get_permissions_using_thought(thought):
     permission.delete()
   
   # Current policy dictates that there are a one-to-one relationship between thoughts and themes. This will change in the future.
   if thought.theme != None:
-    deleteTheme(thought.theme)
+    delete_theme(thought.theme)
     
   thought.delete()
 
-def makeThoughtPublicUsingId(thoughtId):
+def make_thought_public_using_id(thoughtId):
   """Make a thought public (viewable by all).
      
      Args:
        thoughtId: the id of the thought to be made public.
   """
-  thought = getThoughtUsingId(thoughtId)
-  if thoughtViewableByallUsingId(thoughtId):
+  thought = get_thought_using_id(thoughtId)
+  if thought_viewable_by_all_using_id(thoughtId):
     return
   else:
     permission = Permission(thought=thought,type=permitAllView)
     permission.put()
 
-def makeThoughtPrivateUsingId(thoughtId):
+def make_thought_private_using_id(thoughtId):
   """Make a thought private (not viewable by all).
      
      Args:
        thoughtId: the id of the thought to be made private.
   """
-  thought = getThoughtUsingId(thoughtId)
-  query = GqlQuery("SELECT * FROM Permission WHERE thought = :1 AND type = :2", thought, permitAllView)
+  thought = get_thought_using_id(thoughtId)
+  query = Permssion.objects.filter(thought=thought, type=permit_all_view)
   for permission in query: # In case there are multiple permissions.
     permission.delete()
 
-def thoughtViewableByallUsingName(name):
+def thought_viewable_by_all_using_name(name):
   """Checks if the Thought is viewable by all using the thought name."""
   thought = GqlQuery('SELECT * FROM Thought WHERE name = :1', name).get()
   return GqlQuery('SELECT * FROM Permission WHERE thought =:1 AND type = :2', thought, permitAllView).get() != None
   
-def thoughtViewableByallUsingId(id):
+def thought_viewable_by_all_using_id(id):
   """Checks if the Thought is viewable by all using the thought id."""
-  thought = getThoughtUsingId(id)
+  thought = get_thought_using_id(id)
   return GqlQuery('SELECT * FROM Permission WHERE thought =:1 AND type = :2', thought, permitAllView).get() != None
 
-def getThoughtConnections(thought):
+def get_thought_connections(thought):
   """Get all connections for a given Thought.
      
      Args:
@@ -179,23 +177,23 @@ def thoughtToDict(thought):
   nodes = getThoughtNodes(thought)
   dictNodes = []
   for node in nodes:
-    dictNodes.append(nodeToDict(node))
+    dictNodes.append(node_to_dict(node))
     
-  connections = getThoughtConnections(thought)
+  connections = get_thought_connections(thought)
   dictConnections = []
   for connection in connections:
-    dictConnections.append(connectionToDict(connection))    
+    dictConnections.append(connection_to_dict(connection))    
     
   data = {
     'name': thought.name,
     'connections': dictConnections,
     'nodes': dictNodes,
     'id': str(thought.key()),
-    'theme': themeToDict(thought.theme)
+    'theme': theme_to_dict(thought.theme)
   }  
   return data
 
-def createOrUpdateThemeFromThoughtDict(thoughtDict, user):
+def create_or_update_themeFromThoughtDict(thoughtDict, user):
   """
      Creates or Updates a Theme based on a Thought Dictionary.
      
@@ -207,8 +205,8 @@ def createOrUpdateThemeFromThoughtDict(thoughtDict, user):
   if Names.theme in thoughtDict:
     themeDict = thoughtDict[Names.theme]
     if themeDict != None:
-      createOrUpdateTheme(themeDict, user)
-      return getThemeUsingId(themeDict[Names.id])
+      create_or_update_theme(themeDict, user)
+      return get_theme_using_id(themeDict[Names.id])
     else:
       return None
 
@@ -225,7 +223,7 @@ def createAndSaveThought(jsonThought, user):
   if Names.name not in jsonThought:
     raise 'The thought has no name.'
         
-  theme = createOrUpdateThemeFromThoughtDict(jsonThought, user)
+  theme = create_or_update_themeFromThoughtDict(jsonThought, user)
 
   thought = Thought(name = jsonThought[Names.name], theme=theme)
   thought.put()
@@ -234,27 +232,27 @@ def createAndSaveThought(jsonThought, user):
   permission.put()
      
   # Create nodes
-  jsonNodes = jsonThought[Names.nodes]
+  json_nodes = jsonThought[Names.nodes]
   nodes = []
-  for jsonNode in jsonNodes:
+  for json_node in json_nodes:
     # Somtimes text is null/empty.
     text = ""
-    if Names.text in jsonNode:
-      text = jsonNode[Names.text]
+    if Names.text in json_node:
+      text = json_node[Names.text]
         
-    node = Node(x=int(jsonNode[Names.x]), y=int(jsonNode[Names.y]), text=text, thought=thought)
+    node = Node(x=int(json_node[Names.x]), y=int(json_node[Names.y]), text=text, thought=thought)
     node.put()
     nodes.append(node)
     
   # Create connections
-  jsonConnections = jsonThought[Names.connections]
-  for jsonConnection in jsonConnections:
-    nodeOne = findNode(nodes, jsonConnection[0][Names.x], jsonConnection[0][Names.y], jsonConnection[0][Names.text])  
-    nodeTwo = findNode(nodes, jsonConnection[1][Names.x], jsonConnection[1][Names.y], jsonConnection[1][Names.text])  
-    connection = Connection(nodeOne=nodeOne, nodeTwo=nodeTwo, thought=thought)
+  json_connections = jsonThought[Names.connections]
+  for jsonConnection in json_connections:
+    node_one = find_node(nodes, jsonConnection[0][Names.x], jsonConnection[0][Names.y], jsonConnection[0][Names.text])  
+    node_two = find_node(nodes, jsonConnection[1][Names.x], jsonConnection[1][Names.y], jsonConnection[1][Names.text])  
+    connection = Connection(node_one=node_one, node_two=node_two, thought=thought)
     connection.put()
   
-  return getThoughtId(thought)
+  return get_thought_id(thought)
   
 def updateThought(thought, jsonThought, user):
   """Updates a Thought model using a JSON Thought Dictionary.
@@ -264,7 +262,7 @@ def updateThought(thought, jsonThought, user):
        jsonThought: a JSON Thought in the form of a dictionary.
        user: the author of the Thought.
   """        
-  theme = createOrUpdateThemeFromThoughtDict(jsonThought, user)
+  theme = create_or_update_themeFromThoughtDict(jsonThought, user)
   
   # Update thought
   if thought.name != jsonThought[Names.name]:
@@ -274,30 +272,30 @@ def updateThought(thought, jsonThought, user):
   thought.put()
   
   # Create Nodes before creating connections because the creation of connections are dependant on nodes already existing.
-  jsonNodes = jsonThought[Names.nodes]
-  for jsonNode in jsonNodes:
-    if Names.id not in jsonNode:
+  json_nodes = jsonThought[Names.nodes]
+  for json_node in json_nodes:
+    if Names.id not in json_node:
       # Create the node.
       # Somtimes text is null/empty.
       text = ""
-      if Names.text in jsonNode:
-        text = jsonNode[Names.text]
-      node = Node(x=int(jsonNode[Names.x]), y=int(jsonNode[Names.y]), text=text, thought=thought)
+      if Names.text in json_node:
+        text = json_node[Names.text]
+      node = Node(x=int(json_node[Names.x]), y=int(json_node[Names.y]), text=text, thought=thought)
       node.put()
       
   # Update the connections before updating nodes because a bug occurs in certain cases if a node is deleted before a connection.
   # Connections are going to be removed from the dict to track which connetions have been deleted since the thought was last saved.
-  connections = getThoughtConnections(thought) 
-  jsonConnections = jsonThought[Names.connections]
+  connections = get_thought_connections(thought) 
+  json_connections = jsonThought[Names.connections]
   nodes = getThoughtNodes(thought)
-  keysToNodes = modelListToDict(nodes) 
-  for jsonConnection in jsonConnections:
+  keys_to_nodes = model_list_to_dict(nodes) 
+  for jsonConnection in json_connections:
     # Find if the connection already exists.
     if Names.id in jsonConnection[0] and Names.id in jsonConnection[1]:
       # Search for the existing node.
       matchingConnection = None
       for connection in connections:
-        if getNodeId(connection.nodeOne) == jsonConnection[0][Names.id] and getNodeId(connection.nodeTwo) == jsonConnection[1][Names.id]:
+        if get_node_id(connection.node_one) == jsonConnection[0][Names.id] and get_node_id(connection.node_two) == jsonConnection[1][Names.id]:
           matchingConnection = connection
           # The connection exists.
           break
@@ -308,23 +306,23 @@ def updateThought(thought, jsonThought, user):
         continue
     
     # The connection has not been saved to the database
-    nodeOne = None
-    nodeTwo = None
+    node_one = None
+    node_two = None
          
-    # Because the jsonConnections may be linked to a new node that does not have an id, we may have to search for it.
+    # Because the json_connections may be linked to a new node that does not have an id, we may have to search for it.
     i = 0
     if Names.id in jsonConnection[i]:
-      nodeOne = keysToNodes[jsonConnection[i][Names.id]]
+      node_one = keys_to_nodes[jsonConnection[i][Names.id]]
     else:
-      nodeOne = findNode(nodes, jsonConnection[i][Names.x], jsonConnection[i][Names.y], jsonConnection[i][Names.text])
+      node_one = find_node(nodes, jsonConnection[i][Names.x], jsonConnection[i][Names.y], jsonConnection[i][Names.text])
             
     i = 1
     if Names.id in jsonConnection[i]:
-      nodeTwo = keysToNodes[jsonConnection[i][Names.id]]
+      node_two = keys_to_nodes[jsonConnection[i][Names.id]]
     else:
-      nodeTwo = findNode(nodes, jsonConnection[i][Names.x], jsonConnection[i][Names.y], jsonConnection[i][Names.text])
+      node_two = find_node(nodes, jsonConnection[i][Names.x], jsonConnection[i][Names.y], jsonConnection[i][Names.text])
     
-    connection = Connection(nodeOne=nodeOne, nodeTwo=nodeTwo, thought=thought)
+    connection = Connection(node_one=node_one, node_two=node_two, thought=thought)
     connection.put()
 
   # Delete the connections left in the list.
@@ -335,24 +333,24 @@ def updateThought(thought, jsonThought, user):
   # Update nodes
   # Nodes will be deleted out of this dictionary to figure out which nodes have been deleted since 
   # the thought is attempted being saved.
-  keysToNodes = modelListToDict(getThoughtNodes(thought)) 
-  jsonNodes = jsonThought[Names.nodes]
+  keys_to_nodes = model_list_to_dict(getThoughtNodes(thought)) 
+  json_nodes = jsonThought[Names.nodes]
   nodes = getThoughtNodes(thought)
-  for jsonNode in jsonNodes:
-    if Names.id not in jsonNode:
+  for json_node in json_nodes:
+    if Names.id not in json_node:
       # This nodes has already been created in the top of this function. So don't delete it by removing it from the dict.
-      node = findNode(nodes, jsonNode[Names.x], jsonNode[Names.y], jsonNode[Names.text])
-      del keysToNodes[getNodeId(node)]
+      node = find_node(nodes, json_node[Names.x], json_node[Names.y], json_node[Names.text])
+      del keys_to_nodes[get_node_id(node)]
       pass
     else:
-      node = keysToNodes[jsonNode[Names.id]]
-      del keysToNodes[jsonNode[Names.id]] # Delete the node, to mark that it still exists.
+      node = keys_to_nodes[json_node[Names.id]]
+      del keys_to_nodes[json_node[Names.id]] # Delete the node, to mark that it still exists.
       # Update the node.
-      node.x = jsonNode[Names.x] 
-      node.y = jsonNode[Names.y]
-      node.text = jsonNode[Names.text]
+      node.x = json_node[Names.x] 
+      node.y = json_node[Names.y]
+      node.text = json_node[Names.text]
       node.put()
       
   # Delete the left-over existing nodes.
-  for node in keysToNodes.values():
+  for node in keys_to_nodes.values():
     node.delete()
