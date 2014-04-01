@@ -8,23 +8,12 @@ import re
 import sys
 
 
-# addIpaddrToPythonPath Constants
-ipaddrPathMac = '/Applications/GoogleAppEngineLauncher.app//Contents/Resources/GoogleAppEngine-default.bundle/Contents/Resources/google_appengine/lib/ipaddr'
-
-def addIpaddrToPythonPath():
-    """Adds ipaddr module to the Python Path.
-    """
-    if os.name == 'posix': # Mac O/S 
-        sys.path.append(ipaddrPathMac)
-    else:
-        raise 'Unknown ipaddr path for this os.'
-
-# getUrlFilePath Constants
-urlRegEx = "^((http[s]?|ftp):\/)?\/?([^:\/\s]+)(:([^\/]*))?((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(\?([^#]*))?(#(.*))?$"
+# get_url_file_path Constants
+url_regex = "^((http[s]?|ftp):\/)?\/?([^:\/\s]+)(:([^\/]*))?((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(\?([^#]*))?(#(.*))?$"
 pathIndex = 6
 fileIndex = 8
   
-def getUrlFilePath(url):
+def get_url_file_path(url):
   """Gets the file Path from a URL.
   
      Args:
@@ -33,12 +22,12 @@ def getUrlFilePath(url):
      Returns:
        the file Path of the URL.
   """
-  m = re.search(urlRegEx, url) 
+  m = re.search(url_regex, url) 
   if m == None:
     return None
   return m.group(pathIndex) + m.group(fileIndex)
 
-def getFilesWithExtension(dir, ext):
+def get_files_with_extensions(dir, ext):
   """Gets all files in a directory with the given extension.
   
      Args:
@@ -49,43 +38,43 @@ def getFilesWithExtension(dir, ext):
        A list of file names that exist in the directory with the given extension.
   """
   files = os.listdir(dir)
-  fileNames = []
+  file_names = []
   for file in files:
     if file.endswith(ext):
-      fileNames.append(file)
-  return fileNames
+      file_names.append(file)
+  return file_names
 
-def lchop(str, chopStr):
-  """Chops the chopStr from the left of the str.
+def lchop(str, chop_str):
+  """Chops the chop_str from the left of the str.
   
      Args:
        str: the string that is chopped.
-       chopStr: the string that is chopped off the other.
+       chop_str: the string that is chopped off the other.
     
     Returns:
-      the remaining string of str with chopStr taking from the left.
+      the remaining string of str with chop_str taking from the left.
       
-      If chopStr can not be chopped from str, then None is returned.
+      If chop_str can not be chopped from str, then None is returned.
   """
-  if str.startswith(chopStr):
-    return str[len(chopStr):]
+  if str.startswith(chop_str):
+    return str[len(chop_str):]
   else:
     return None
 
-def rchop(str, chopStr):
-  """Chops the chopStr from the right of the str.
+def rchop(str, chop_str):
+  """Chops the chop_str from the right of the str.
   
      Args:
        str: the string that is chopped.
-       chopStr: the string that is chopped off the other.
+       chop_str: the string that is chopped off the other.
     
     Returns:
-      the remaining string of str with chopStr taking from the right.
+      the remaining string of str with chop_str taking from the right.
       
-      If chopStr can not be chopped from str, then None is returned.
+      If chop_str can not be chopped from str, then None is returned.
   """
-  if str.endswith(chopStr):
-    return str[:(len(str) - len(chopStr))]
+  if str.endswith(chop_str):
+    return str[:(len(str) - len(chop_str))]
   else:
     return None
 
@@ -100,20 +89,20 @@ def is_none_or_empty(str):
   """
   return str == None or str == ""
   
-def modelListToDict(modelList):
+def model_list_to_dict(model_list):
   """Converts a list of models into a dictionary of model keys to models.
     
      Args:
-       modelList: the list of models.
+       model_list: the list of models.
        
      Returns: a dict of model keys associated to models.
   """
   dict = {}
-  for model in modelList:
+  for model in model_list:
     dict[str(model.key())] = model
   return dict
   
-def requestArgsToDict(request):
+def request_args_to_dict(request):
   """Converts the URL and POST parameters to a singly-valued dictionary.
 
      Returns:

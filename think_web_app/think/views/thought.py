@@ -10,7 +10,7 @@ import logging
 
 from django.views.generic import View
 from django.utils import simplejson
-from utilities import getUrlFilePath, is_none_or_empty
+from utilities import get_url_file_path, is_none_or_empty
 from openiduser.session import authenticate_user_session, get_session_id
 from think.models import * # Get the constants
 import think.json
@@ -109,13 +109,13 @@ class ThoughtView(View):
   """Serves Thoughts via a RESTful API.
   """
   
-  def get(self, *args, **kwargs):
+  def get(self, request, *args, **kwargs):
     """Simply returns a specific Thought.
     """
-    thought_id = kwargs[Names.id]
-    thought_name = self.request.get(Names.name)
-    collection = self.request.get(Names.collection)
-    type = self.request.get(Names.type)
+    thought_id = self.request.GET[Names.id] if Names.id in self.request.GET else None
+    thought_name = self.request.GET[Names.name] if Names.name in self.request.GET else None
+    collection = self.request.GET[Names.collection] if Names.collection in self.request.GET else None
+    type = self.request.GET[Names.type] if Names.type in self.request.GET else None
     
     # Count the number of params.
     no_of_params = 0
