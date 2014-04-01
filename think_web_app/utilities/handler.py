@@ -2,7 +2,7 @@
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import util, template
 
-from utilities import isNoneOrEmpty
+from utilities import is_none_or_empty
 
 
 class CreateEditEntityHandler(webapp.RequestHandler):
@@ -17,7 +17,7 @@ class CreateEditEntityHandler(webapp.RequestHandler):
     def render_page(self):
         id = self.request.get('id')
         entity = None
-        if not isNoneOrEmpty(id):
+        if not is_none_or_empty(id):
             id = int(id)
             entity = self.modelClass.get(db.Key.from_path(self.modelClass.__name__, id))
         context = {
@@ -33,7 +33,7 @@ class CreateEditEntityHandler(webapp.RequestHandler):
     def post(self):
         id = self.request.get('id')
         entity = None
-        if not isNoneOrEmpty(id):
+        if not is_none_or_empty(id):
             id = int(id)
             entity = self.modelClass.get(db.Key.from_path(self.modelClass.__name__, id))
             

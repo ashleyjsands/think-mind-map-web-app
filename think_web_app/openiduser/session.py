@@ -7,9 +7,8 @@ import os
 from datetime import datetime
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-from google.appengine.ext.db import GqlQuery
 
-from utilities import isNoneOrEmpty
+from utilities import is_none_or_empty
 from openiduser.models import Session, User
 
 

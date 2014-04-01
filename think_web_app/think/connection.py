@@ -3,12 +3,10 @@ A collection of methods relating to the Connection model.
 """
 
 
-from google.appengine.ext.db import GqlQuery
-
-from think.node import getNodeId
+from think.node import get_node_id
 
 
-def connectionToDict(connection):
+def connection_to_dict(connection):
   """Converts the connection to a dictionary.
      
      Args:
@@ -17,4 +15,4 @@ def connectionToDict(connection):
      Returns:
        a dictionary.
   """
-  return {'nodeOne': getNodeId(connection.nodeOne), 'nodeTwo': getNodeId(connection.nodeTwo)}
+  return {'node_one': get_node_id(connection.node_one), 'node_two': get_node_id(connection.node_two)}

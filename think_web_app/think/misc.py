@@ -3,7 +3,7 @@ A collection of miscellaneous methods.
 """
 
 
-def getId(model):
+def get_id(model):
   """Gets the model's id.
      
      Args:

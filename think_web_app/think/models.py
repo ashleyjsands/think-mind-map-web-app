@@ -8,8 +8,8 @@ THOUGHT_THEME_NAME = "thought_theme"
 NODE_THOUGHT_COLLECTION_NAME = "thought_nodes"
 PERMISSION_THOUGHT_COLLECTION_NAME = "thought_permissions"
 CONNECTION_THOUGHT_COLLECTION_NAME = "thought_connections"
-CONNECTION_NODE_ONE_COLLECTION_NAME = "nodeOne_connections"
-CONNECTION_NODE_TWO_COLLECTION_NAME = "nodeTwo_connections"
+CONNECTION_NODE_ONE_COLLECTION_NAME = "node_one_connections"
+CONNECTION_NODE_TWO_COLLECTION_NAME = "node_two_connections"
 PERMISSION_USER_COLLECTION_NAME = "user_permissions"
 SESSION_USER_COLLECTION_NAME = "session_permissions"
 METADATA_THEME_NAME = "metadata_theme"
@@ -45,19 +45,19 @@ class Node(models.Model):
 class Connection(models.Model):
   """Represents a connection between two nodes in a Thought."""
   # The collection_name must be set for the back-reference property of the Node class.
-  nodeOne = models.ForeignKey('Node')
-  nodeTwo = models.ForeignKey('Node')
+  node_one = models.ForeignKey('Node')
+  node_two = models.ForeignKey('Node')
   thought = models.ForeignKey('Thought')
 
 
 # The types of permssions.
 permitNone = "none"
 permitView = "view"
-permitModify = "modify"
+permit_modify = "modify"
 permitAllView = "all-view"
 
 permissionTypes = [
-  permitNone, permitView, permitModify, permitAllView
+  permitNone, permitView, permit_modify, permitAllView
 ]
 
 
@@ -76,6 +76,6 @@ class ServerInitialised(models.Model):
 
 class MetaData(models.Model):
   """Contains all the meta data/configurable data for the Web App."""
-  originalTheme = models.ForeignKey('Theme')
+  original_theme = models.ForeignKey('Theme')
 
 

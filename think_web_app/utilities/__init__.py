@@ -89,7 +89,7 @@ def rchop(str, chopStr):
   else:
     return None
 
-def isNoneOrEmpty(str):
+def is_none_or_empty(str):
   """Checks if a string is None of Empty.
   
      Args:

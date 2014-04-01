@@ -1,106 +1,54 @@
 """
-A collection of methods that relate to the User Model.
+A collection of user related methods.
 """
 
+from datetime import datetime
+import uuid
 
-from google.appengine.ext.db import GqlQuery
-from django.utils import simplejson
+# Must set this env var before importing any part of Django
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
-from utilities import isNoneOrEmpty
+from utilities.session import create_cookie
+from openiduser.session import session_id_param_name
 from openiduser.models import Session, User
-from openiduser.user import *
-from think.DatastoreModels import * # Get the constants
-from think.thought import getThoughtUsingId
 
 
-def getThoughtDescriptionsForUser(user):
-  """Gets a list of descriptions for Thoughts the User is allowed to view or modify. 
-     
-     Args:
-       user: the user.
+def create_user_session(response, claimed_id, server_url):
+    """Creates the session cookie in the response.
+       
+       Params:
+         response: the HTTP response.
+         claimed_id: ?
+         server_url: ?
+    """
+    session_id = str(uuid.uuid4())
+    user = getUser(claimed_id, server_url)
+    if user == None:
+      user = createUser(claimed_id, server_url)
     
-     Returns: a list of description dictionaries that are meant to be converted into JSON. The description dictionaries have the following properties: id, name.
-  """
-  descriptions = []
-  viewable = GqlQuery('SELECT * FROM Permission WHERE user = :1 AND type = :2 and thought != :3', user, permitView, None)
-  modifiable = GqlQuery('SELECT * FROM Permission WHERE user = :1 AND type = :2 and thought != :3', user, permitModify, None)
-  queries = [viewable, modifiable]
-  for query in queries:
-    for permission in query:
-      description = {
-        'id': str(permission.thought.key()),
-        'name': permission.thought.name,
-      }
-      descriptions.append(description)
-  return descriptions
-  
-def userCanViewThoughtUsingName(user, thoughtName):
-  """Checks if the user has permission to view the given thought. 
+    session = Session(user = user, id = session_id, datetime = datetime.now()) 
+    session.put()
     
-     Args:
-       user: the user.
-       thoughtName: the name of the thought to check.
-     
-     Returns: true if the user can view the thought, false otherwise.
-  """
-  thought = GqlQuery('SELECT * FROM Thought WHERE name = :1', thoughtName).get()
-  
-  viewable = GqlQuery('SELECT * FROM Permission WHERE user = :1 AND thought = :2 AND type = :3', user, thought, permitView)
-  if viewable.get() != None:
-    return True
-    
-  modifiable = GqlQuery('SELECT * FROM Permission WHERE user = :1 AND thought = :2 AND type = :3', user, thought, permitModify)
-  return modifiable.get() != None
+    create_cookie(response, session_id_param_name, session_id)
 
-def userCanViewThoughtUsingId(user, thoughtId):
-  """Checks if the user has permission to view the given thought. 
-    
-     Args:
-       user: the user.
-       thoughtId: the id of the thought to check.
-     
-     Returns: true if the user can view the thought, false otherwise.
-  """
-  thought = getThoughtUsingId(thoughtId)
-  
-  viewable = GqlQuery('SELECT * FROM Permission WHERE user = :1 AND thought = :2 AND type = :3', user, thought, permitView)
-  if viewable.get() != None:
-    return True
-    
-  return userCanModifyThoughtUsingId(user, thoughtId)
-
-def userCanModifyThoughtUsingId(user, thoughtId):
-  """Checks if the user has permission to modify the given thought. 
-    
-     Args:
-       user: the user.
-       thoughtId: the id of the thought to check.
-     
-     Returns: true if the user can modify the thought, false otherwise.
-  """
-  thought = getThoughtUsingId(thoughtId)
-      
-  modifiable = GqlQuery('SELECT * FROM Permission WHERE user = :1 AND thought = :2 AND type = :3', user, thought, permitModify)
-  return modifiable.get() != None
-  
-def getUser(username):
-  """Gets the User Model.
-     
+def get_user(claimed_id, server_url):
+  """Gets the User model.
+       
      Params:
-       username: the username of the User model.
-     
-     Returns: the User Model, or None.
+       claimed_id: ?
+       server_url: ?
   """
-  query = GqlQuery("SELECT * FROM User WHERE username = :1", username)
+  query = User.objects.filter(claimed_id = claimed_id, server_url = server_url)
   return query.get()
 
-def deleteSessionsForUser(user):
-  """Delete all the sessions for a user.
-     
-     Args:
-       user: the user to delete sessions for.
+def create_user(claimed_id, server_url):
+  """Creates and returns a User model.
+       
+     Params:
+       claimed_id: ?
+       server_url: ?
   """
-  query = GqlQuery('SELECT * FROM Session WHERE user = :1', user)
-  for session in query:
-    session.delete()
-    
+  user = User(claimed_id=claimed_id, server_url=server_url)
+  user.put()
+  return user

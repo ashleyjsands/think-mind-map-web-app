@@ -2,7 +2,7 @@
 This script contains one method, main, which sets up the Tutorial thought and the administration data.
 """
 
-from think.DatastoreModels import *
+from think.models import *
 
 def main():
   """Create the Tutorial Thought and set up some administration data."""
@@ -52,80 +52,80 @@ def main():
   node12 = Node(x=406,y=98,text="Drag the background to change the view",thought = thought)
   node12.put()
 
-  c = Connection(nodeOne=node0, nodeTwo=node1, thought=thought)
+  c = Connection(node_one=node0, node_two=node1, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node1, nodeTwo=node2, thought=thought)
+  c = Connection(node_one=node1, node_two=node2, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node2, nodeTwo=node3, thought=thought)
+  c = Connection(node_one=node2, node_two=node3, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node1, nodeTwo=node4, thought=thought)
+  c = Connection(node_one=node1, node_two=node4, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node2, nodeTwo=node5, thought=thought)
+  c = Connection(node_one=node2, node_two=node5, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node2, nodeTwo=node7, thought=thought)
+  c = Connection(node_one=node2, node_two=node7, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node12, nodeTwo=node1, thought=thought)
+  c = Connection(node_one=node12, node_two=node1, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node6, nodeTwo=node1, thought=thought)
+  c = Connection(node_one=node6, node_two=node1, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node10, nodeTwo=node8, thought=thought)
+  c = Connection(node_one=node10, node_two=node8, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node11, nodeTwo=node8, thought=thought)
+  c = Connection(node_one=node11, node_two=node8, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node11, nodeTwo=node9, thought=thought)
+  c = Connection(node_one=node11, node_two=node9, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node11, nodeTwo=node10, thought=thought)
+  c = Connection(node_one=node11, node_two=node10, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node9, nodeTwo=node10, thought=thought)
+  c = Connection(node_one=node9, node_two=node10, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node9, nodeTwo=node8, thought=thought)
+  c = Connection(node_one=node9, node_two=node8, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node8, nodeTwo=node1, thought=thought)
+  c = Connection(node_one=node8, node_two=node1, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node3, nodeTwo=node5, thought=thought)
+  c = Connection(node_one=node3, node_two=node5, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node7, nodeTwo=node5, thought=thought)
+  c = Connection(node_one=node7, node_two=node5, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node7, nodeTwo=node3, thought=thought)
+  c = Connection(node_one=node7, node_two=node3, thought=thought)
   c.put()
 
-  c = Connection(nodeOne=node7, nodeTwo=node2, thought=thought)
+  c = Connection(node_one=node7, node_two=node2, thought=thought)
   c.put()
   
   u = User(claimedId='https://www.google.com/accounts/o8/id?id=AItOawm-IAYwB6N0m80U9tq470sflYBbRJSP2j0', serverUrl='https://www.google.com/accounts/o8/ud')
   u.put()
   
-  p = Permission(thought=thought, type=permitModify, user=u)
+  p = Permission(thought=thought, type=permit_modify, user=u)
   p.put()
   
-  originalTheme = Theme(name='Think - Original', backgroundTopColor='#abccff', backgroundBottomColor='#000000', nodeOuterColor='#000000', nodeInnerColor='#555555', nodeTextColor='#FFFFFF', connectionOuterColor='#111111', connectionInnerColor='#CCCCCC', connectionTextColor='#FFFFFF')
-  originalTheme.put()
+  original_theme = Theme(name='Think - Original', backgroundTopColor='#abccff', backgroundBottomColor='#000000', nodeOuterColor='#000000', nodeInnerColor='#555555', nodeTextColor='#FFFFFF', connectionOuterColor='#111111', connectionInnerColor='#CCCCCC', connectionTextColor='#FFFFFF')
+  original_theme.put()
   
-  themePermission = Permission(theme=originalTheme, type=permitAllView)
-  themePermission.put()
+  theme_permission = Permission(theme=original_theme, type=permitAllView)
+  theme_permission.put()
   
-  md = MetaData(originalTheme=originalTheme)
+  md = MetaData(original_theme=original_theme)
   md.put()
 
 
-def getDefaultTheme():
+def get_default_theme():
   """Gets the Default Theme.
   """
-  return MetaData.all().get().originalTheme
+  return MetaData.all().get().original_theme
