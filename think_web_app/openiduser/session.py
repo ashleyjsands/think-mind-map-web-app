@@ -14,34 +14,34 @@ from openiduser.models import Session, User
 
 
 # Constants
-sessionExpirationInDays = 1
-sessionIdParamName = 'session_id'
+session_expiration_in_days = 1
+session_id_param_name = 'session_id'
 
 
-def getSessionId(request):
+def get_session_id(request):
   """ Gets the session id parameter out of the cookie. """
-  if sessionIdParamName in request.cookies:
-    return request.cookies[sessionIdParamName]
+  if session_id_param_name in request.cookies:
+    return request.cookies[session_id_param_name]
   else:
     return None
 
-def deleteOldSessions():
+def delete_old_sessions():
   """Deletes all old sessions."""
-  for session in Session.all():
-    if (datetime.now() - session.datetime).days >= sessionExpirationInDays:
+  for session in Session.objects.all():
+    if (datetime.now() - session.datetime).days >= session_expiration_in_days:
       session.delete()
 
 if __name__ == '__main__':
-  deleteOldSessions()
+  delete_old_sessions()
 
   
-def deleteSession(sessionId):
-  """Delete the session using the sessionId.
+def delete_session(session_id):
+  """Delete the session using the session_id.
      
      Args:
-       sessionId: the sessionId of the session to delete.
+       session_id: the session_id of the session to delete.
   """
-  query = GqlQuery('SELECT * FROM Session WHERE session_id = :1', sessionId)
+  query = Session.objects.filter(session_id = session_id)
   for session in query:
     session.delete()
 
@@ -53,7 +53,7 @@ def createOrLoadSession(request, user=None):
        user: the user object.
   """
   session = None
-  id = request.get(sessionIdParamName)
+  id = request.get(session_id_param_name)
   if id:
     try:
       session = db.get(db.Key.from_path('Session', int(id)))
@@ -63,27 +63,27 @@ def createOrLoadSession(request, user=None):
   else:
     session = Session(user=user, datetime= datetime.now())
     # Store the Session
-    setSessionId(session)
+    setsession_id(session)
         
   return session
   
-def authenticateUserSession(sessionId):
+def authenticate_user_session(session_id):
   """Authenticates a user's session.
      
      Params:
-       sessionId: the id of session from the cookie.
+       session_id: the id of session from the cookie.
     
      Returns:
        None if the session is invalid or the User model instance if it is valid.
   """
-  if isNoneOrEmpty(sessionId):
-    raise 'sessionId can not be None'
+  if is_none_or_empty(session_id):
+    raise 'session_id can not be None'
     
-  query = GqlQuery("SELECT * FROM Session WHERE id = :1", sessionId)
+  query = Session.objects.filter(session_id = session_id)
   session = query.get()
   if not session :
     return None
-  elif (datetime.now() - session.datetime).days >= sessionExpirationInDays:
+  elif (datetime.now() - session.datetime).days >= session_expiration_in_days:
     return None
   else:
     return session.user

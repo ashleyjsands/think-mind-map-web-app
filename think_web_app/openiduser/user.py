@@ -10,46 +10,46 @@ import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from google.appengine.ext.db import GqlQuery
 
-from utilities.session import createCookie
-from openiduser.session import sessionIdParamName
+from utilities.session import create_cookie
+from openiduser.session import session_id_param_name
 from openiduser.models import Session, User
 
 
-def createUserSession(response, claimedId, serverUrl):
+def create_user_session(response, claimed_id, server_url):
     """Creates the session cookie in the response.
        
        Params:
          response: the HTTP response.
-         claimedId: ?
-         serverUrl: ?
+         claimed_id: ?
+         server_url: ?
     """
-    sessionId = str(uuid.uuid4())
-    user = getUser(claimedId, serverUrl)
+    session_id = str(uuid.uuid4())
+    user = getUser(claimed_id, server_url)
     if user == None:
-      user = createUser(claimedId, serverUrl)
+      user = createUser(claimed_id, server_url)
     
-    session = Session(user = user, id = sessionId, datetime = datetime.now()) 
+    session = Session(user = user, id = session_id, datetime = datetime.now()) 
     session.put()
     
-    createCookie(response, sessionIdParamName, sessionId)
+    create_cookie(response, session_id_param_name, session_id)
 
-def getUser(claimedId, serverUrl):
+def get_user(claimed_id, server_url):
   """Gets the User model.
        
      Params:
-       claimedId: ?
-       serverUrl: ?
+       claimed_id: ?
+       server_url: ?
   """
-  query = GqlQuery('SELECT * FROM User WHERE claimedId = :1 AND serverUrl = :2', claimedId, serverUrl)
+  query = User.objects.filter(claimed_id = claimed_id, server_url = server_url)
   return query.get()
 
-def createUser(claimedId, serverUrl):
+def create_user(claimed_id, server_url):
   """Creates and returns a User model.
        
      Params:
-       claimedId: ?
-       serverUrl: ?
+       claimed_id: ?
+       server_url: ?
   """
-  user = User(claimedId=claimedId, serverUrl=serverUrl)
+  user = User(claimed_id=claimed_id, server_url=server_url)
   user.put()
   return user
