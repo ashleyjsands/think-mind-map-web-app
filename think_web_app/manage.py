@@ -8,6 +8,6 @@ if __name__ == "__main__":
     from django.core.management import execute_from_command_line
 
     import think.server as server
-    server.initialise_server()
+    #server.initialise_server()
 
     execute_from_command_line(sys.argv)
