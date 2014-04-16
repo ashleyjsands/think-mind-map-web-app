@@ -11,11 +11,11 @@ import logging
 from django.views.generic import View
 from django.utils import simplejson
 from utilities import get_url_file_path, is_none_or_empty
-from openiduser.session import authenticate_user_session, get_session_id
 from think.models import * # Get the constants
 import think.json
-from think.thought import Names
+from think.thought import Names, thought_viewable_by_all_using_name
 from think.permission import get_permission_type, is_user_permitted_to_modify_thought
+from think.user import user_can_view_thought_using_name, user_can_view_thought_using_id
 
 
 # Constants
@@ -134,7 +134,7 @@ class ThoughtView(View):
       return
     
     body = {} 
-    session_id = get_session_id(self.request)
+    session_id = "fake_session_id_to_avoid_authentication_for_the_time_being" #get_session_id(self.request)
        
     if not is_none_or_empty(collection):
       # Get a collection for the user.
@@ -145,7 +145,7 @@ class ThoughtView(View):
         self.response.out.write(simplejson.JSONEncoder().encode(body))
         return
       # Authenticate User.
-      user = authenticate_user_session(session_id)
+      user = "fake user" #authenticate_user_session(session_id)
       if user == None:
         body['success'] = False
         body['errorMsg'] = 'Your session has expired.'
@@ -174,7 +174,7 @@ class ThoughtView(View):
         identifier = thought_id
       elif not is_none_or_empty(thought_name):
         thought_viewable = thought_viewable_by_all_using_name
-        user_can_view_thought = user_can_view_thoughtUsingName
+        user_can_view_thought = user_can_view_thought_using_name
         get_thought = get_thoughtUsingName
         identifier = thought_name
       
