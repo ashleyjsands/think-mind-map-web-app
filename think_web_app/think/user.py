@@ -10,26 +10,8 @@ import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 from utilities.session import create_cookie
-from django.contrib.auth.models import Session, User
+from django.contrib.auth.models import User
 
-
-def create_user_session(response, claimed_id, server_url):
-    """Creates the session cookie in the response.
-       
-       Params:
-         response: the HTTP response.
-         claimed_id: ?
-         server_url: ?
-    """
-    session_id = str(uuid.uuid4())
-    user = getUser(claimed_id, server_url)
-    if user == None:
-      user = createUser(claimed_id, server_url)
-    
-    session = Session(user = user, id = session_id, datetime = datetime.now()) 
-    session.put()
-    
-    create_cookie(response, session_id_param_name, session_id)
 
 def get_user(claimed_id, server_url):
   """Gets the User model.

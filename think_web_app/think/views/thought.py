@@ -13,7 +13,7 @@ from django.utils import simplejson
 from utilities import get_url_file_path, is_none_or_empty
 from think.models import * # Get the constants
 import think.json
-from think.thought import Names, thought_viewable_by_all_using_name
+from think.thought import Names, thought_viewable_by_all_using_name, get_thought_using_name, get_thought_using_id
 from think.permission import get_permission_type, is_user_permitted_to_modify_thought
 from think.user import user_can_view_thought_using_name, user_can_view_thought_using_id
 
@@ -175,13 +175,13 @@ class ThoughtView(View):
       elif not is_none_or_empty(thought_name):
         thought_viewable = thought_viewable_by_all_using_name
         user_can_view_thought = user_can_view_thought_using_name
-        get_thought = get_thoughtUsingName
+        get_thought = get_thought_using_name
         identifier = thought_name
       
       # Get the user info.
       user = None
       if not is_none_or_empty(session_id):
-        user = authenticate_user_session(session_id)
+        user = "stub" #authenticate_user_session(session_id)
 
       if not thought_viewable(identifier):
         # Check session.
