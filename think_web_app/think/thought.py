@@ -228,7 +228,7 @@ def createAndSaveThought(jsonThought, user):
   thought = Thought(name = jsonThought[Names.name], theme=theme)
   thought.put()
     
-  permission = Permission(thought=thought, user=user, type=permitModify)
+  permission = Permission(thought=thought, user=user, type=permit_modify)
   permission.put()
      
   # Create nodes

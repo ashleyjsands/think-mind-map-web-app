@@ -15,4 +15,4 @@ def connection_to_dict(connection):
      Returns:
        a dictionary.
   """
-  return {'node_one': get_node_id(connection.node_one), 'node_two': get_node_id(connection.node_two)}
+  return {'nodeOne': get_node_id(connection.node_one), 'nodeTwo': get_node_id(connection.node_two)}

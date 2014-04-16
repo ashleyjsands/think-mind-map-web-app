@@ -104,7 +104,7 @@ def get_view_permissions(user, thought):
   return get_permission(user, thought, permit_view)
 
 def get_modify_permissions(user, thought):
-  return get_permission(user, thought, permitModify)
+  return get_permission(user, thought, permit_modify)
 
 def get_permissions(user, thought, a_type):
   return Permission.objects.filter(user=user, thought = thought, type=a_type)

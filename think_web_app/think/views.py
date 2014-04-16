@@ -328,7 +328,7 @@ class ThoughtHandler(webapp.RequestHandler):
       body[Names.thought] = thought_to_dict(thought)
       # Move the following lines into the function above.
       permissionType = getPermissionType(thought, user)
-      body[Names.thought][Names.modifiable] = permissionType == permitModify
+      body[Names.thought][Names.modifiable] = permissionType == permit_modify
       body[Names.thought][Names.isPublic] = thoughtViewableByallUsingName(thought.name)
     else:
       raise "LogicError"

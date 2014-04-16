@@ -10,6 +10,8 @@ import logging
 
 from django.views.generic import View
 from django.utils import simplejson
+from django.http import HttpResponse
+
 from utilities import get_url_file_path, is_none_or_empty
 from think.models import * # Get the constants
 import think.json
@@ -117,18 +119,9 @@ class ThoughtView(View):
     collection = self.request.GET[Names.collection] if Names.collection in self.request.GET else None
     type = self.request.GET[Names.type] if Names.type in self.request.GET else None
     
-    # Count the number of params.
-    no_of_params = 0
-    if not is_none_or_empty(thought_id):
-      no_of_params += 1
-    
-    if not is_none_or_empty(thought_name):
-      no_of_params += 1
-
-    if not is_none_or_empty(collection):
-      no_of_params += 1
-    
     # id, name or collection must be supplied, but not more than one.
+    params = [thought_id, thought_name, collection]
+    no_of_params = len(filter(lambda x: not is_none_or_empty(x), params))
     if no_of_params != 1:
       self.error(400) # Bad Request
       return
@@ -181,7 +174,8 @@ class ThoughtView(View):
       # Get the user info.
       user = None
       if not is_none_or_empty(session_id):
-        user = "stub" #authenticate_user_session(session_id)
+	#TODO: fix this up
+        user = None #authenticate_user_session(session_id)
 
       if not thought_viewable(identifier):
         # Check session.
@@ -214,13 +208,14 @@ class ThoughtView(View):
       body[Names.thought] = thought_to_dict(thought)
       # Move the following lines into the function above.
       permissionType = get_permission_type(thought, user)
-      body[Names.thought][Names.modifiable] = permissionType == permitModify
+      body[Names.thought][Names.modifiable] = permissionType == permit_modify
       body[Names.thought][Names.is_public] = thought_viewable_by_all_using_name(thought.name)
     else:
       raise "LogicError"
         
-    self.response.headers[content_type_name] = json_content_type  
-    self.response.out.write(simplejson.JSONEncoder().encode(body))
+    response = HttpResponse(simplejson.JSONEncoder().encode(body))
+    response[content_type_name] = json_content_type  
+    return response
           
   def post(self, *args, **kwargs):
     """Creates a thought based on the input in the POST request.
