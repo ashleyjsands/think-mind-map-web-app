@@ -99,7 +99,7 @@ def model_list_to_dict(model_list):
   """
   dict = {}
   for model in model_list:
-    dict[str(model.key())] = model
+    dict[str(model.id)] = model
   return dict
   
 def request_args_to_dict(request):

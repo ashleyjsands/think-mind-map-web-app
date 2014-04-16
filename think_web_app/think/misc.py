@@ -11,4 +11,4 @@ def get_id(model):
      
      Returns: a string representing the model's id.
   """
-  return str(model.key())
+  return str(model.id)

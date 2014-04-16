@@ -13,7 +13,7 @@ from django.utils import simplejson
 from utilities import get_url_file_path, is_none_or_empty
 from think.models import * # Get the constants
 import think.json
-from think.thought import Names, thought_viewable_by_all_using_name, get_thought_using_name, get_thought_using_id
+from think.thought import Names, thought_viewable_by_all_using_name, get_thought_using_name, get_thought_using_id, thought_to_dict
 from think.permission import get_permission_type, is_user_permitted_to_modify_thought
 from think.user import user_can_view_thought_using_name, user_can_view_thought_using_id
 
@@ -211,7 +211,7 @@ class ThoughtView(View):
         return
       
       body['success'] = True
-      body[Names.thought] = thoughtToDict(thought)
+      body[Names.thought] = thought_to_dict(thought)
       # Move the following lines into the function above.
       permissionType = get_permission_type(thought, user)
       body[Names.thought][Names.modifiable] = permissionType == permitModify

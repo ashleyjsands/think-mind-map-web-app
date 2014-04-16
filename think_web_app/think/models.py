@@ -45,28 +45,31 @@ class Node(models.Model):
 class Connection(models.Model):
   """Represents a connection between two nodes in a Thought."""
   # The collection_name must be set for the back-reference property of the Node class.
-  node_one = models.ForeignKey('Node')
-  node_two = models.ForeignKey('Node')
+  node_one = models.ForeignKey('Node', related_name='node_one')
+  node_two = models.ForeignKey('Node', related_name='node_two')
   thought = models.ForeignKey('Thought')
 
 
 # The types of permssions.
-permitNone = "none"
-permitView = "view"
+permit_none = "none"
+permit_view = "view"
 permit_modify = "modify"
-permitAllView = "all-view"
+permit_all_view = "all-view"
 
 permissionTypes = [
-  permitNone, permitView, permit_modify, permitAllView
+  (permit_none, permit_none),
+  (permit_view, permit_view),
+  (permit_modify, permit_modify),
+  (permit_all_view, permit_all_view)
 ]
 
 
 class Permission(models.Model):
   """Contains permission information as to who can modify/view a model."""
-  theme = models.ForeignKey('Theme')
-  thought = models.ForeignKey('Thought')
+  theme = models.ForeignKey('Theme', blank=True, null=True)
+  thought = models.ForeignKey('Thought', blank=True, null=True)
   type = models.TextField(choices=set(permissionTypes))
-  user = models.ForeignKey('User')
+  user = models.ForeignKey(User, blank=True, null=True)
   
 
 class ServerInitialised(models.Model):

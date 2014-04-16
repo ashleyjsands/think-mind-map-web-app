@@ -325,7 +325,7 @@ class ThoughtHandler(webapp.RequestHandler):
         return
       
       body['success'] = True
-      body[Names.thought] = thoughtToDict(thought)
+      body[Names.thought] = thought_to_dict(thought)
       # Move the following lines into the function above.
       permissionType = getPermissionType(thought, user)
       body[Names.thought][Names.modifiable] = permissionType == permitModify

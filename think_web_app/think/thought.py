@@ -6,7 +6,7 @@ A collection of methods relating to the Thought Model.
 from think.models import * # Get the constants
 from think.node import node_to_dict, get_node_id, find_node
 from think.connection import connection_to_dict
-from think.permission import get_permissions_using_thought
+from think.permission import get_permissions_using_thought, get_all_view_permissions
 from think.theme import theme_to_dict, get_theme_id, create_or_update_theme, delete_theme, get_theme_using_id
 from think.misc import get_id
 from think.data import get_default_theme
@@ -86,7 +86,7 @@ def delete_thought_using_id(id):
   """
   thought = get_thought_using_id(id)
   
-  for node in getThoughtNodes(thought):
+  for node in get_thought_nodes(thought):
     node.delete()
     
   for connection in get_thought_connections(thought):
@@ -111,7 +111,7 @@ def make_thought_public_using_id(thoughtId):
   if thought_viewable_by_all_using_id(thoughtId):
     return
   else:
-    permission = Permission(thought=thought,type=permitAllView)
+    permission = Permission(thought=thought,type=permit_all_view)
     permission.put()
 
 def make_thought_private_using_id(thoughtId):
@@ -127,13 +127,13 @@ def make_thought_private_using_id(thoughtId):
 
 def thought_viewable_by_all_using_name(name):
   """Checks if the Thought is viewable by all using the thought name."""
-  thought = GqlQuery('SELECT * FROM Thought WHERE name = :1', name).get()
-  return GqlQuery('SELECT * FROM Permission WHERE thought =:1 AND type = :2', thought, permitAllView).get() != None
+  thought = Thought.objects.filter(name=name).get()
+  return get_all_view_permissions(thought) != None
   
 def thought_viewable_by_all_using_id(id):
   """Checks if the Thought is viewable by all using the thought id."""
   thought = get_thought_using_id(id)
-  return GqlQuery('SELECT * FROM Permission WHERE thought =:1 AND type = :2', thought, permitAllView).get() != None
+  return get_all_view_permissions(thought) != None
 
 def get_thought_connections(thought):
   """Get all connections for a given Thought.
@@ -143,13 +143,13 @@ def get_thought_connections(thought):
     
      Returns: a list of Connections.
   """
-  query = GqlQuery("SELECT * FROM Connection WHERE thought = :1", thought)
+  query = Connection.objects.filter(thought=thought)
   list = []
   for connection in query:
     list.append(connection)
   return list
 
-def getThoughtNodes(thought):
+def get_thought_nodes(thought):
   """Get all nodes for a given Thought.
      
      Args:
@@ -157,13 +157,13 @@ def getThoughtNodes(thought):
     
      Returns: a list of Nodes.
   """
-  query = GqlQuery("SELECT * FROM Node WHERE thought = :1", thought)
+  query = Node.objects.filter(thought=thought)
   list = []
   for node in query:
     list.append(node)
   return list
     
-def thoughtToDict(thought):
+def thought_to_dict(thought):
   """Convert a Thought Model into a dictionary ready to be turned into a JSON string.
      
      Args:
@@ -174,7 +174,7 @@ def thoughtToDict(thought):
   if thought == None: 
     return None
   
-  nodes = getThoughtNodes(thought)
+  nodes = get_thought_nodes(thought)
   dictNodes = []
   for node in nodes:
     dictNodes.append(node_to_dict(node))
@@ -188,7 +188,7 @@ def thoughtToDict(thought):
     'name': thought.name,
     'connections': dictConnections,
     'nodes': dictNodes,
-    'id': str(thought.key()),
+    'id': str(thought.id),
     'theme': theme_to_dict(thought.theme)
   }  
   return data
@@ -287,7 +287,7 @@ def updateThought(thought, jsonThought, user):
   # Connections are going to be removed from the dict to track which connetions have been deleted since the thought was last saved.
   connections = get_thought_connections(thought) 
   json_connections = jsonThought[Names.connections]
-  nodes = getThoughtNodes(thought)
+  nodes = get_thought_nodes(thought)
   keys_to_nodes = model_list_to_dict(nodes) 
   for jsonConnection in json_connections:
     # Find if the connection already exists.
@@ -333,9 +333,9 @@ def updateThought(thought, jsonThought, user):
   # Update nodes
   # Nodes will be deleted out of this dictionary to figure out which nodes have been deleted since 
   # the thought is attempted being saved.
-  keys_to_nodes = model_list_to_dict(getThoughtNodes(thought)) 
+  keys_to_nodes = model_list_to_dict(get_thought_nodes(thought)) 
   json_nodes = jsonThought[Names.nodes]
-  nodes = getThoughtNodes(thought)
+  nodes = get_thought_nodes(thought)
   for json_node in json_nodes:
     if Names.id not in json_node:
       # This nodes has already been created in the top of this function. So don't delete it by removing it from the dict.

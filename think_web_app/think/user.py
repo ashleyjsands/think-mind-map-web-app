@@ -49,7 +49,7 @@ def get_thought_descriptions_for_user(user):
   for query in queries:
     for permission in query:
       description = {
-        'id': str(permission.thought.key()),
+        'id': str(permission.thought.id),
         'name': permission.thought.name,
       }
       descriptions.append(description)
@@ -101,7 +101,7 @@ def userCanModifyThoughtUsingId(user, thought_id):
   return modifiable.get() != None
 
 def get_view_permissions(user, thought):
-  return get_permission(user, thought, permitView)
+  return get_permission(user, thought, permit_view)
 
 def get_modify_permissions(user, thought):
   return get_permission(user, thought, permitModify)

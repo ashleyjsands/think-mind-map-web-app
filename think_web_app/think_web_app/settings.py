@@ -1,5 +1,10 @@
 # Django settings for think_web_app project.
 
+# Fix a bug in django relating to databases
+import os;
+os.environ['LANG'] = 'en_US.UTF-8'
+os.environ['LC_ALL'] = 'en_US.UTF-8'
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -120,8 +125,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
+    'think',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )

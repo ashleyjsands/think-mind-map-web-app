@@ -40,14 +40,14 @@ def get_permission_type(thought, user):
        thought: the thought.
        user: the user.
      
-     Returns: the Permission type of the thought for the user, permitAllView (if it exists for the thought), or None.
+     Returns: the Permission type of the thought for the user, permit_all_view (if it exists for the thought), or None.
   """
-  query = GqlQuery("SELECT * FROM Permission WHERE thought = :1 AND user = :2", thought, user)
+  query = Permission.objects.filter(thought=thought, user=user)
   permission = query.get()
   if permission != None:
     return permission.type
   else:
-    # Try to get the permitAllView type if it exists.
+    # Try to get the permit_all_view type if it exists.
     query = Permission.objects.filter(thought=thought)
     permission = query.get()
     if permission != None:
@@ -79,3 +79,7 @@ def get_permissions_using_theme(theme):
     permissions.append(permission)
   return permissions
   
+def get_all_view_permissions(thought):
+  return Permission.objects.filter(thought=thought, type=permit_all_view).get()
+
+
